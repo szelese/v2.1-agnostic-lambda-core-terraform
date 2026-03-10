@@ -5,9 +5,17 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.0"
+    }
   }
 }
 
 provider "aws" {
   region = var.aws_region
+}
+
+provider "github" {
+  owner = "szelese" // Update this to your GitHub username or organization
 }
