@@ -53,3 +53,26 @@ resource "aws_iam_role_policy_attachment" "gha_ecr_poweruser" {
   role       = aws_iam_role.gha_deploy.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
 }
+
+# Policy to allow GitHub Actions to update the Lambda function
+resource "aws_iam_role_policy" "gha_lambda_update" {
+  name = "v2.1-gha-lambda-update-policy"
+  role = aws_iam_role.gha_deploy.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "lambda:UpdateFunctionCode",
+          "lambda:UpdateFunctionConfiguration",
+          "lambda:GetFunction",
+          "lambda:GetFunctionConfiguration"
+        ]
+        # Restrict to the specific Lambda function for security
+        Resource = aws_lambda_function.api_core.arn
+      }
+    ]
+  })
+}

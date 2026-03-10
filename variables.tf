@@ -6,5 +6,5 @@ variable "aws_region" {
 variable "github_repo" {
   type        = string
   description = "GitHub repository in the format 'owner/repo' (e.g., 'my-org/my-repo')"
-  default = "szelese/v2-agnostic-lambda-core" // Update this default value to your actual GitHub repository
+  default = "szelese/v2.1-agnostic-lambda-core-terraform" // Update this default value to your actual GitHub repository
 }
