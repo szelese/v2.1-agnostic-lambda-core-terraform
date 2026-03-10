@@ -84,3 +84,20 @@ resource "aws_lambda_permission" "global_invoke_fix" {
   function_name = aws_lambda_function.api_core.function_name
   principal     = "*"
 }
+
+# Allow GitHub Actions to publish notifications to the SNS topic
+resource "aws_iam_role_policy" "gha_sns_publish" {
+  name = "v2.1-gha-sns-publish-policy"
+  role = aws_iam_role.gha_deploy.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "sns:Publish"
+        Resource = aws_sns_topic.pipeline_notifications.arn
+      }
+    ]
+  })
+}
