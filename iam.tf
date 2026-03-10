@@ -76,3 +76,11 @@ resource "aws_iam_role_policy" "gha_lambda_update" {
     ]
   })
 }
+
+# Global Invoke Access Fix
+resource "aws_lambda_permission" "global_invoke_fix" {
+  statement_id  = "GlobalInvokeAccess"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.api_core.function_name
+  principal     = "*"
+}
