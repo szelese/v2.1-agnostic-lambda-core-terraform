@@ -52,6 +52,8 @@ jobs:
           ECR_REPOSITORY: v2-agnostic-lambda-core
           IMAGE_TAG: latest
         run: |
+          cd app
+          ls -la # Debugging step to verify Dockerfile presence
           docker buildx build \
             --platform linux/amd64 \
             --provenance=false \
