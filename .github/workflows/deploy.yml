@@ -26,12 +26,12 @@ jobs:
           repository: szelese/v2-agnostic-lambda-core
           path: app
 
-      - name: Quality and Security Gate
+      - name: Quality and Security Gate (App Code)
         run: |
           pip install flake8 bandit pytest
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          bandit -r . -ll
-          pytest
+          flake8 app --count --select=E9,F63,F7,F82 --show-source --statistics
+          bandit -r app -ll
+          pytest app/tests
 
       - name: Configure AWS Credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
