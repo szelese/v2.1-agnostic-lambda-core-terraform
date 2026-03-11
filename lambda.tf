@@ -20,7 +20,7 @@ resource "aws_lambda_function" "api_core" {
   function_name = "v2-1-agnostic-lambda"
   role          = aws_iam_role.lambda_exec.arn
   package_type  = "Image"
-  image_uri     = "${aws_ecr_repository.lambda_core.repository_url}:latest"
+  image_uri     = "${aws_ecr_repository.lambda_core.repository_url}:${var.image_tag}"
 
   environment {
     variables = {

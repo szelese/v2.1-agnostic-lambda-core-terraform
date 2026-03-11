@@ -12,5 +12,11 @@ variable "github_repo" {
 variable "notification_email" {
   type        = string
   description = "Email address to receive notifications (if applicable)"
-  default     = "szeles.ervin10@gmail.com" // Update this default value to your actual email address
+  default     = "test.123@gmail.com" // Update this default value to your actual email address
+}
+
+variable "image_tag" {
+  type        = string
+  description = "Docker image tag(latest or commit hash). CI/CD update Lambda with this."
+  default     = "latest"
 }

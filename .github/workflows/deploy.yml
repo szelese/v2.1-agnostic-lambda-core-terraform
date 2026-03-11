@@ -20,6 +20,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Checkout Application Code
+        uses: actions/checkout@v4
+        with:
+          repository: szelese/v2-1-agnostic-lambda-core
+          path: app
+
       - name: Quality and Security Gate
         run: |
           pip install flake8 bandit pytest
