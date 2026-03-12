@@ -53,7 +53,7 @@ data "aws_iam_openid_connect_provider" "github" {
 
 # GitHub Actions Deploy Role
 resource "aws_iam_role" "gha_deploy" {
-  name = "v2-1-gha-deploy-role"
+  name = var.gha_deploy_role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -73,12 +73,6 @@ resource "aws_iam_role" "gha_deploy" {
       }
     }]
   })
-}
-
-# GHA Role Policies
-resource "aws_iam_role_policy_attachment" "gha_ecr_poweruser" {
-  role       = aws_iam_role.gha_deploy.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
 }
 
 # Policy to allow GitHub Actions to update the Lambda function

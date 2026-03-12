@@ -12,7 +12,7 @@ variable "github_repo" {
 variable "notification_email" {
   type        = string
   description = "Email address to receive notifications (if applicable)"
-  default     = "test.123@gmail.com" // Update this default value to your actual email address
+  default     = "" // Update this default value to your actual email address or add to terraform.tfvars value to receive notifications about Lambda errors via SNS topic
 }
 
 variable "image_tag" {
