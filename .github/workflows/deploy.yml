@@ -23,7 +23,7 @@ jobs:
       - name: Checkout Application Code
         uses: actions/checkout@v4
         with:
-          repository: ${{ vars.GITHUB_OWNER }}/v2-agnostic-lambda-core
+          repository: ${{ github.repository_owner }}/v2-agnostic-lambda-core
           path: app
 
       - name: Quality and Security Gate (App Code)
