@@ -41,8 +41,8 @@ resource "github_actions_variable" "lambda_function_name" {
 }
 
 # GitHub owner automatically set as GitHub Actions variable
-resource "github_actions_variable" "github_owner" {
+resource "github_actions_variable" "repo_owner" {
   repository    = var.github_repo
-  variable_name = "GITHUB_OWNER"
+  variable_name = "REPO_OWNER"
   value         = var.github_owner
 }
