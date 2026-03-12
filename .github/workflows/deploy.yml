@@ -69,7 +69,7 @@ jobs:
             
             # 2. Wait for the update to stabilize
             echo "Waiting for Lambda update to complete..."
-            aws lambda wait function-updated ${{ vars.LAMBDA_FUNCTION_NAME }}
+            aws lambda wait function-updated --function-name ${{ vars.LAMBDA_FUNCTION_NAME }}
             
             # 3. Update version environment variable
             SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
