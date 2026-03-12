@@ -12,3 +12,37 @@ resource "github_actions_secret" "sns_topic_arn" {
   plaintext_value  = aws_sns_topic.pipeline_notifications.arn
 }
 
+# AWS Region automatically set as GitHub Actions variable
+resource "github_actions_variable" "aws_region" {
+  repository    = var.github_repo
+  variable_name = "AWS_REGION"
+  value         = var.aws_region
+}
+
+# AWS Account ID automatically set as GitHub Actions variable
+resource "github_actions_variable" "aws_account_id" {
+  repository    = var.github_repo
+  variable_name = "AWS_ACCOUNT_ID"
+  value         = var.aws_account_id
+}
+
+# ECR Repo name automatically set as GitHub Actions variable
+resource "github_actions_variable" "ecr_repository_name" {
+  repository    = var.github_repo
+  variable_name = "ECR_REPOSITORY_NAME"
+  value         = var.ecr_repository_name
+}
+
+# Lambda function name automatically set as GitHub Actions variable
+resource "github_actions_variable" "lambda_function_name" {
+  repository    = var.github_repo
+  variable_name = "LAMBDA_FUNCTION_NAME"
+  value         = var.lambda_function_name
+}
+
+# GitHub owner automatically set as GitHub Actions variable
+resource "github_actions_variable" "github_owner" {
+  repository    = var.github_repo
+  variable_name = "GITHUB_OWNER"
+  value         = var.github_owner
+}
