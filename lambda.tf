@@ -17,7 +17,7 @@ resource "null_resource" "push_dummy_image" {
 # Create Lambda function using the dummy image
 resource "aws_lambda_function" "api_core" {
   depends_on    = [null_resource.push_dummy_image]
-  function_name = "v2-1-agnostic-lambda"
+  function_name = var.lambda_function_name
   role          = aws_iam_role.lambda_exec.arn
   package_type  = "Image"
   image_uri     = "${aws_ecr_repository.lambda_core.repository_url}:${var.image_tag}"

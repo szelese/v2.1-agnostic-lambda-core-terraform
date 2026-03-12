@@ -76,6 +76,7 @@ resource "aws_iam_role_policy" "gha_lambda_update" {
     ]
   })
 }
+/* debugging note: The following permission was added to allow public access to the Lambda Function URL, but it can be removed if you want to restrict access and only allow authenticated users or specific IPs. If you remove this, make sure to adjust the Lambda Function URL permissions accordingly in the GitHub Actions workflow or other clients that need to access it.
 
 # Global Invoke Access Fix
 resource "aws_lambda_permission" "global_invoke_fix" {
@@ -84,6 +85,7 @@ resource "aws_lambda_permission" "global_invoke_fix" {
   function_name = aws_lambda_function.api_core.function_name
   principal     = "*"
 }
+*/
 
 # Allow GitHub Actions to publish notifications to the SNS topic
 resource "aws_iam_role_policy" "gha_sns_publish" {

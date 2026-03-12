@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "lambda_core" {
-  name                 = "v2-agnostic-lambda-core"
+  name                 = var.ecr_repository_name
   image_tag_mutability = "MUTABLE"
   force_delete         = true
 
