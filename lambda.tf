@@ -42,7 +42,7 @@ resource "aws_lambda_function_url" "api_url" {
 # Grant public access to the Function URL
 resource "aws_lambda_permission" "public_url_access" {
   statement_id           = "FunctionURLPublicAccess"
-  action                 = "lambda:InvokeFunctionUrl"
+  action                 = "lambda:InvokeFunction"
   function_name          = aws_lambda_function.api_core.function_name
   principal              = "*"
   function_url_auth_type = "NONE"
