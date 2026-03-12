@@ -31,7 +31,6 @@ resource "aws_iam_policy" "gha_ecr_access" {
     {
       Effect = "Allow"
       Action = [
-        "ecr:GetAuthorizationToken",
         "ecr:BatchCheckLayerAvailability",
         "ecr:GetDownloadUrlForLayer",
         "ecr:BatchGetImage",
