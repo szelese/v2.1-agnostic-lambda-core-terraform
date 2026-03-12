@@ -45,5 +45,4 @@ resource "aws_lambda_permission" "public_url_access" {
   action                 = "lambda:InvokeFunction"
   function_name          = aws_lambda_function.api_core.function_name
   principal              = "*"
-  function_url_auth_type = "NONE"
 }
