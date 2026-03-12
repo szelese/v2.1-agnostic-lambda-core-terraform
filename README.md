@@ -54,7 +54,7 @@ Terraform automatically writes the deployed `LAMBDA_URL` and `SNS_TOPIC_ARN`
 back to GitHub Secrets via the [GitHub Provider](https://registry.terraform.io/providers/integrations/github/latest/docs),  
 completing the zero-manual-step loop. This ensures the deployed infrastructure automatically feeds runtime configuration back into the CI/CD pipeline.
 
-> **Local run requirement:** export `GITHUB_TOKEN` with `repo` scope before `terraform apply`.
+> **Local run requirement:** Provide GitHub App credentials (`github_app_id`, `github_app_installation_id`, `github_app_pem_file_path`) via a local `terraform.tfvars` file before running `terraform apply`.
 
 ### 5. Performance & Security Preservation
 - **Median latency**: 44 ms (unchanged from v2)
@@ -92,7 +92,7 @@ Performance test reports from the original v2 implementation:
 - Terraform >= 1.5
 - AWS credentials configured
 - AWS OIDC setup (check my v1 project: [Original v1 documentation](https://szelese.github.io/ci-cd-gha-aws/))
-- `GITHUB_TOKEN` env var with `repo` scope
+- GitHub App configured with secret modification permissions (requires `.pem` private key)
 
 ---
 

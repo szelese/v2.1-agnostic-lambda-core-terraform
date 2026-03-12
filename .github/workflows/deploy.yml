@@ -23,7 +23,7 @@ jobs:
       - name: Checkout Application Code
         uses: actions/checkout@v4
         with:
-          repository: szelese/v2-agnostic-lambda-core
+          repository: ${{ vars.GITHUB_OWNER }}/v2-agnostic-lambda-core
           path: app
 
       - name: Quality and Security Gate (App Code)
@@ -36,8 +36,8 @@ jobs:
       - name: Configure AWS Credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::330552995255:role/v2-1-gha-deploy-role # FIXED NAME
-          aws-region: eu-west-2 # FIXED REGION
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/v2-1-gha-deploy-role
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -48,8 +48,8 @@ jobs:
 
       - name: Build and Push Docker Image
         env:
-          ECR_REGISTRY: 330552995255.dkr.ecr.eu-west-2.amazonaws.com # FIXED REGION
-          ECR_REPOSITORY: v2-agnostic-lambda-core
+          ECR_REGISTRY: ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com
+          ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY_NAME }}
           IMAGE_TAG: latest
         run: |
           cd app
@@ -64,18 +64,18 @@ jobs:
         run: |
             # 1. Update Lambda code with the new image
             aws lambda update-function-code \
-              --function-name v2-1-agnostic-lambda \
-              --image-uri ${{ steps.login-ecr.outputs.registry }}/v2-agnostic-lambda-core:latest
+              --function-name ${{ vars.LAMBDA_FUNCTION_NAME }} \
+              --image-uri ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest
             
             # 2. Wait for the update to stabilize
             echo "Waiting for Lambda update to complete..."
-            aws lambda wait function-updated --function-name v2-1-agnostic-lambda
+            aws lambda wait function-updated ${{ vars.LAMBDA_FUNCTION_NAME }}
             
             # 3. Update version environment variable
             SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
             echo "VERSION=$SHORT_SHA" >> $GITHUB_ENV
             aws lambda update-function-configuration \
-              --function-name v2-1-agnostic-lambda \
+              --function-name ${{ vars.LAMBDA_FUNCTION_NAME }} \
               --environment "Variables={VERSION=$SHORT_SHA}"
 
       - name: Smart Smoke Test (Version Validation)
