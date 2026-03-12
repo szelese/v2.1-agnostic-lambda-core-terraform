@@ -17,11 +17,18 @@ resource "aws_iam_role" "lambda_exec" {
 # === CUSTOM ECR POLICY – only to own repo (least privilege) ===
 resource "aws_iam_policy" "gha_ecr_access" {
   name        = "v2-1-gha-ecr-limited"
-  description = "Limited access only to our ECR repository"
+  description = "Limited access only to our ECR repository + GetAuthorizationToken for GitHub Actions"
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
+      Effect = "Allow"
+      Action = [
+        "ecr:GetAuthorizationToken"
+      ]
+      Resource = "*"
+    },
+    {
       Effect = "Allow"
       Action = [
         "ecr:GetAuthorizationToken",
