@@ -23,8 +23,12 @@ variable "image_tag" {
 
 variable "aws_account_id" {
   type        = string
-  description = "AWS Account ID where the ECR repository and Lambda function will be created"
+  description = "AWS Account ID 12-digit format"
   default     = "" // Update this or add to terraform.tfvars value to your actual AWS Account ID
+  validation {
+    condition     = length(var.aws_account_id) == 12 && can(regex("^[0-9]+$", var.aws_account_id))
+    error_message = "AWS Account ID must be a 12-digit number."
+  }
 }
 
 variable "ecr_repository_name" {
@@ -41,7 +45,7 @@ variable "lambda_function_name" {
 
 variable "github_owner" {
   type        = string
-  description = "GitHub owner (szelese)"
+  description = "GitHub owner"
   default     = "szelese" // Update this default value to your GitHub username or organization
 }
 
@@ -59,4 +63,10 @@ variable "github_app_installation_id" {
 variable "github_app_pem_file_path" {
   type        = string
   description = "Path to the GitHub App private key PEM file"
+}
+
+variable "gha_deploy_role_name" {
+  type    = string
+  description = "Name of the GitHub Actions deploy role"
+  default = "v2-1-gha-deploy-role"
 }

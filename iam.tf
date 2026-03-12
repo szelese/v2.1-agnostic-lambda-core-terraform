@@ -14,9 +14,36 @@ resource "aws_iam_role" "lambda_exec" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
-  role       = aws_iam_role.lambda_exec.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+# === CUSTOM ECR POLICY – only to own repo (least privilege) ===
+resource "aws_iam_policy" "gha_ecr_access" {
+  name        = "v2-1-gha-ecr-limited"
+  description = "Limited access only to our ECR repository"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+        "ecr:PutImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload"
+      ]
+      Resource = [
+        aws_ecr_repository.lambda_core.arn,
+        "${aws_ecr_repository.lambda_core.arn}/*"
+      ]
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "gha_ecr_access_attach" {
+  role       = aws_iam_role.gha_deploy.name
+  policy_arn = aws_iam_policy.gha_ecr_access.arn
 }
 
 # GitHub Actions OIDC Provider
@@ -76,16 +103,6 @@ resource "aws_iam_role_policy" "gha_lambda_update" {
     ]
   })
 }
-/* debugging note: The following permission was added to allow public access to the Lambda Function URL, but it can be removed if you want to restrict access and only allow authenticated users or specific IPs. If you remove this, make sure to adjust the Lambda Function URL permissions accordingly in the GitHub Actions workflow or other clients that need to access it.
-
-# Global Invoke Access Fix
-resource "aws_lambda_permission" "global_invoke_fix" {
-  statement_id  = "GlobalInvokeAccess"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.api_core.function_name
-  principal     = "*"
-}
-*/
 
 # Allow GitHub Actions to publish notifications to the SNS topic
 resource "aws_iam_role_policy" "gha_sns_publish" {

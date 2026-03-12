@@ -46,3 +46,10 @@ resource "github_actions_variable" "repo_owner" {
   variable_name = "REPO_OWNER"
   value         = var.github_owner
 }
+
+# GitHub Actions Role ARN automatically set as GitHub Actions variable
+resource "github_actions_variable" "gha_role_arn" {
+  repository    = var.github_repo
+  variable_name = "GHA_ROLE_ARN"
+  value         = "arn:aws:iam::${var.aws_account_id}:role/${var.gha_deploy_role_name}"
+}
